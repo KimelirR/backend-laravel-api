@@ -3,26 +3,26 @@
 ## Installation
 
 * clone this project into your machine
-        ```
-        git clone https://github.com/KimelirR/backend-laravel-api.git
-        ```
+    ```
+    git clone https://github.com/KimelirR/backend-laravel-api.git
+    ```
 * clone this project into your machine
-        ```
-        cd backend-laravel-api
-        ```
+    ```
+    cd backend-laravel-api
+    ```
 * Dockerize
-        ```
-        docker-compose up -d
-        ```
+    ```
+    docker-compose up -d
+    ```
         
 * Database Migrate on docker
-        ```
-        docker-compose exec news-api-laravel ./artisan migrate --seed
-        ```
+    ```
+    docker-compose exec news-api-laravel ./artisan migrate --seed
+    ```
 * Run  Server
-        ```
-        docker-compose exec news-api-laravel ./artisan serve
-        ```
+    ```
+    docker-compose exec news-api-laravel ./artisan serve
+    ```
 
 
 * Run the application and on your Browser run .
