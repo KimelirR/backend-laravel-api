@@ -103,5 +103,7 @@ php artisan serve
 
 > Or import news_aggregator.sql database to the database and run
 
+ * The Frontend Image
 
+    ![alt text](https://github.com/KimelirR/backend-laravel-api/blob/master/public/images/public/images/news-aggregator.png?raw=true)
 
