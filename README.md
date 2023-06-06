@@ -105,5 +105,5 @@ php artisan serve
 
  * The Frontend Image
 
-    ![alt text](https://github.com/KimelirR/backend-laravel-api/blob/master/public/images/public/images/news-aggregator.png?raw=true)
+    ![alt text](https://github.com/KimelirR/backend-laravel-api/blob/master/public/images/news-aggregator.png?raw=true)
 
