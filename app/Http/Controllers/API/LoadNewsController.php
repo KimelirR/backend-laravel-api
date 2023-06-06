@@ -29,7 +29,23 @@ class LoadNewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $search = News::where('id', 'LIKE', '%' . $request->search . '%')
+                        ->orWhere('title', 'LIKE', '%' . $request->search . '%')
+                        ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                        ->orWhere('content', 'LIKE', '%' . $request->search . '%')
+                        ->orWhere('api_source_id', 'LIKE', '%' . $request->search . '%')
+                        ->orWhere('image_url', 'LIKE', '%' . $request->search . '%')
+                        ->orWhere('published_at', 'LIKE', '%' . $request->search . '%')
+                        ->get();
+        if ($search)
+        {
+            return response()->json(['data' => $search], 200);
+        }
+        else
+        {
+            return response()->json(['status' => 'error', 'message' => 'Technical error ocurred , contact administrator.'], 404);
+        }
+
     }
 
     /**

@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\API\LoadNewsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\AthorsController;
+use App\Http\Controllers\API\LoadNewsController;
 use App\Http\Controllers\API\FetchNewsController;
 
 /*
@@ -18,8 +19,9 @@ use App\Http\Controllers\API\FetchNewsController;
 |
 */
 
-
+Route::get('getauthors', [AthorsController::class , 'index']);
 Route::get('loadnews', [LoadNewsController::class , 'index']);
+Route::post('searchnews', [LoadNewsController::class , 'store']);
 Route::get('fetchnewsapi', [FetchNewsController::class , 'fetchNewsAPI']);
 Route::get('fetchthegurdian', [FetchNewsController::class , 'fetchTheGurdianAPI']);
 Route::get('fetchnewyorktimes', [FetchNewsController::class , 'fetchNewYorkTimesAPI']);
