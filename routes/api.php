@@ -20,8 +20,10 @@ use App\Http\Controllers\API\FetchNewsController;
 */
 
 Route::get('getauthors', [AthorsController::class , 'index']);
+
 Route::get('loadnews', [LoadNewsController::class , 'index']);
 Route::post('searchnews', [LoadNewsController::class , 'store']);
+
 Route::get('fetchnewsapi', [FetchNewsController::class , 'fetchNewsAPI']);
 Route::get('fetchthegurdian', [FetchNewsController::class , 'fetchTheGurdianAPI']);
 Route::get('fetchnewyorktimes', [FetchNewsController::class , 'fetchNewYorkTimesAPI']);

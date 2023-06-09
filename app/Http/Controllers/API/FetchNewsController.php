@@ -79,9 +79,9 @@ class FetchNewsController extends Controller
 
                         $category_id = $this->getCategoryId($categ);
 
-                        $image = $row->urlToImage;
+                        $image = $this->getImageUrl($row,$source_slug);
 
-                        $image ? $image_url = $image : $image_url = 'https://th.bing.com/th/id/OIP.QhTDYQE7jtXcW5zIIi2YIgHaHa?w=160&h=180&c=7&r=0&o=5&pid=1.7';
+                        $image ? $image_url = $image : $image_url = '';
 
                         $web_url = $row->url;
 
@@ -211,6 +211,8 @@ class FetchNewsController extends Controller
 
             $categories = ['general', 'business', 'sports', 'science', 'health', 'entertainment', 'technology'];
 
+            // https://static01.nyt.com/
+
             foreach ($categories as $categ) {
 
                 $query = $categ;
@@ -262,10 +264,10 @@ class FetchNewsController extends Controller
 
                         foreach ($multimedia as $img) {
                             $img = (object) $img;
-                            if ($img->subtype == 'xlarge') {
-                                $image = $img->url;
+                            if ($img->subtype == 'jumbo') {
+                                $image = 'https://static01.nyt.com/'.$img->url;
 
-                                $image ? $image_url = $image : $image_url = 'https://th.bing.com/th/id/OIP.QhTDYQE7jtXcW5zIIi2YIgHaHa?w=160&h=180&c=7&r=0&o=5&pid=1.7';
+                                $image ? $image_url = $image : $image_url = '';
                             }
                         }
 
