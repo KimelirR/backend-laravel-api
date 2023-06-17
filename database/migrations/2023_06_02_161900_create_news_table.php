@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->longText('title');
 
-            $table->longText('description')->unique();
+            $table->longText('description')->nullable();
 
             $table->longText('content')->nullable();
 

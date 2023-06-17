@@ -22,7 +22,7 @@ class UserFactory extends Factory
             'name' => "Ronald Kimeli",
             'email' => "kimeliryans@gmail.com",
             'email_verified_at' => now(),
-            'password' => Hash::make('kimelicandidate@2022'), // password
+            'password' => Hash::make('*noOneLike@%admin#'), // password
             'preferred_source_id' => 1,
             'preferred_category_id' => 2,
             'preferred_author_id' => 3,

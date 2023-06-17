@@ -1,49 +1,46 @@
-# Use a PHP 8.1 base image with Apache
-FROM php:8.1-apache
+FROM php:8.2-fpm as php
 
-# Install system dependencies
+RUN usermod -u 1000 www-data
+
+# Copy composer.lock and composer.json
+COPY composer.lock composer.json /var/www/
+
+# Set working directory
+WORKDIR /var/www
+
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    zip \
-    unzip \
-    curl \
+    build-essential \
     libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
+    libzip-dev \
+    unzip \
+    git \
+    curl \
+    libonig-dev
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+# Install extensions
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg
+RUN docker-php-ext-install gd
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
-
-# Copy Laravel project files to the container
-COPY . /var/www/html
-
-# Set the working directory to the Laravel project root
-WORKDIR /var/www/html
-
-# Install Composer and dependencies
+# Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install --no-dev
 
-# Set permissions for Laravel storage directory
-RUN chmod -R 777 storage
+COPY --chown=www-data:www-data . .
 
-# Set the environment variables
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
 
-#RUN rm -r /etc/apache2/apache2.conf
-# Copy Apache virtual host configuration file
-COPY apache/apache.conf /etc/apache2/sites-available/000-default.conf
-#COPY apache/apache2.conf /etc/apache2/apache2.conf
+RUN chmod -R 755 /var/www/Docker/php/entrypoint.sh
 
-# Expose port 80 for Apache
-EXPOSE 80
+ENTRYPOINT [ "Docker/php/entrypoint.sh" ]
 
-# Start Apache web server
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

@@ -1,26 +1,74 @@
-version: "3"
+version: "3.8"
+
 services:
-  backend-app:
+  lara:
     build:
       context: .
+      target: php
+      args:
+        - APP_ENV=${APP_ENV}
       dockerfile: Dockerfile
-    ports:
-      - "8000:80"
+    image: laravelapi
+    container_name: lara
+    restart: unless-stopped
+    tty: true
     environment:
-      - DB_HOST=mysql
-      - DB_DATABASE=news
-      - DB_USERNAME=root
-      - DB_PASSWORD=root
-      - DB_PORT=3306
-    depends_on:
-      - mysql
-  mysql:
-    image: mysql:8
-    environment:
-      - MYSQL_ROOT_USER=root
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=news
+      SERVICE_NAME: lara
+      SERVICE_TAGS: dev
+    working_dir: /var/www
     volumes:
-      - ./mysql-data:/var/lib/mysql
+      - ./:/var/www
+      - ./Docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    depends_on:
+      - webserver
+    networks:
+      - app-network
+
+  webserver:
+    container_name: webserver
+    image: nginx:stable-alpine-slim
+    restart: unless-stopped
+    tty: true
     ports:
-      - 3306:3306
+        - 8000:80
+    volumes:
+        - ./:/var/www
+        - ./Docker/nginx/conf.d:/etc/nginx/conf.d
+        - ./Docker/nginx/logs:/var/log/nginx
+    logging:
+        options:
+            max-size: "10m"
+            max-file: "3"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+#Database Service
+  db:
+   image : mysql:5.7
+   container_name : db
+   restart: unless-stopped
+   tty: true
+   ports:
+      - "3307:3306"
+   environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+   volumes:
+      - dbdata:/var/lib/mysql
+      - ./Docker/mysql/my.cnf:/etc/mysql/my.cnf
+   networks:
+      - app-network
+
+volumes:
+  dbdata:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
